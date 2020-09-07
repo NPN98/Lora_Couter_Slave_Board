@@ -60,6 +60,20 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 /* USER CODE BEGIN Private defines */
 
+
+#define CHANNEL_1 GPIO_PIN_4
+#define CHANNEL_2 GPIO_PIN_5
+#define CHANNEL_3 GPIO_PIN_6
+#define CHANNEL_4 GPIO_PIN_7
+#define CHANNEL_5 GPIO_PIN_0
+#define CHANNEL_6 GPIO_PIN_1
+#define CHANNEL_7 GPIO_PIN_11
+#define CHANNEL_8 GPIO_PIN_12
+#define CHANNEL_9 GPIO_PIN_13
+#define CHANNEL_10 GPIO_PIN_14
+#define CHANNEL_11 GPIO_PIN_15
+#define CHANNEL_12 GPIO_PIN_8
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

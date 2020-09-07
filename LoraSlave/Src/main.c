@@ -20,7 +20,17 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "string.h"
 unsigned time=0;
+unsigned time_Machine_13=0;
+
+
+
+
+unsigned Time_AntiR_1=0, Time_AntiR_2=0, Time_AntiR_3=0, Time_AntiR_4=0, Time_AntiR_5=0, Time_AntiR_6=0, Time_AntiR_7=0, Time_AntiR_8=0, Time_AntiR_9=0, Time_AntiR_10=0, Time_AntiR_11=0, Time_AntiR_12=0;
+unsigned Time_Delay_Machine_1=0,Time_Delay_Machine_2=0,Time_Delay_Machine_3=0 ,Time_Delay_Machine_4=0,Time_Delay_Machine_5=0 ,Time_Delay_Machine_6=0,Time_Delay_Machine_7=0,Time_Delay_Machine_8=0,Time_Delay_Machine_9=0,Time_Delay_Machine_10=0,Time_Delay_Machine_11=0,Time_Delay_Machine_12=0;
+
+
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
@@ -30,22 +40,11 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
-
-#define Sucsess_19 GPIO_PIN_4
-#define Error_19 GPIO_PIN_5
-#define Sucsess_20 GPIO_PIN_6
-#define Error_20 GPIO_PIN_7
-#define Sucsess_21 GPIO_PIN_0
-#define Error_21 GPIO_PIN_1
-#define Sucsess_22 GPIO_PIN_11
-#define Error_22 GPIO_PIN_12
-#define Sucsess_23 GPIO_PIN_13
-#define Error_23 GPIO_PIN_14
-#define Sucsess_24 GPIO_PIN_15
-#define Error_24 GPIO_PIN_8
+//Set_Param_Channel();
 
 
-//char buff_Suscess_1[] = "@S1&";
+
+
 
 
 /**
@@ -54,26 +53,14 @@ static void MX_USART2_UART_Init(void);
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
 
-  /* USER CODE END 1 */
-  
-
-  /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
-  /* USER CODE BEGIN Init */
-
-  /* USER CODE END Init */
-
   /* Configure the system clock */
   SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
-
-  /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
@@ -95,6 +82,23 @@ int main(void)
   }
   /* USER CODE END 3 */
 }
+
+
+
+void Set_Param_Channel(unsigned GET_ANTI_MACHINE, unsigned GET_DELAY_MACHINE, unsigned TIME_DELAY, char String_Tranmit[5])
+{
+	if(HAL_GetTick() - 500 > GET_ANTI_MACHINE)
+	  {
+		if(HAL_GetTick() - TIME_DELAY > GET_DELAY_MACHINE)
+		  {
+			 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+			 HAL_UART_Transmit(&huart1,(uint8_t*)String_Tranmit,5,500);
+			 GET_DELAY_MACHINE = HAL_GetTick();
+			}
+		}
+GET_ANTI_MACHINE = HAL_GetTick();	
+}  
+
 
 /**
   * @brief System Clock Configuration
@@ -264,156 +268,214 @@ static void MX_GPIO_Init(void)
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-				
-//	void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-//		 {
-//				if(GPIO_Pin == GPIO_PIN_0){
-//				if(HAL_GetTick() - 500 > time)
-//				{
-//				 printf("%d", ID_DEVICE_NAME);
-//				}
-//				time = HAL_GetTick();
-//				}
-//			 //HAL_Delay(300); 
-//			}
 	
+
+	switch(GPIO_Pin)
+	{
+		case CHANNEL_1: 
+		{  
+			
+			if(HAL_GetTick() - 200 > Time_AntiR_1)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_1)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@S7&",5,500);
+						Time_Delay_Machine_1 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_1 = HAL_GetTick();	
+		}
+		break;
+		
+		case CHANNEL_2:
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_2)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_2)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@E7&",5,500);
+						Time_Delay_Machine_2 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_2 = HAL_GetTick();			
+		}
+		break;
+		
+		case CHANNEL_3:
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_3)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_3)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@S8&",5,500);
+						Time_Delay_Machine_3 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_3 = HAL_GetTick();
+		}
+		break;
+		case  CHANNEL_4: 
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_4)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_4)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@E8&",5,500);
+						Time_Delay_Machine_4 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_4 = HAL_GetTick();
+		}
+		break;
+	 case  CHANNEL_5: 
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_5)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_5)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@S9&",5,500);
+						Time_Delay_Machine_5 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_5 = HAL_GetTick();		
+		}
+		break;
+	  case  CHANNEL_6: 
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_6)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_6)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@E9&",5,500);
+						Time_Delay_Machine_6 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_6 = HAL_GetTick();		
+		}
+		break;
+		case  CHANNEL_7: 
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_7)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_7)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@S10&",5,500);
+						Time_Delay_Machine_7 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_7 = HAL_GetTick();		
+		}
+		break;
+		case  CHANNEL_8: 
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_8)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_8)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@E10&",5,500);
+						Time_Delay_Machine_8 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_8 = HAL_GetTick();			
+		}
+		break;	
+		case  CHANNEL_9: 
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_9)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_9)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@S11&",5,500);
+						Time_Delay_Machine_9 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_9 = HAL_GetTick();		
+		}
+		break;
+		case  CHANNEL_10: 
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_10)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_10)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@E11&",5,500);
+						Time_Delay_Machine_10 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_10 = HAL_GetTick();		
+		}
+		break;
+		case  CHANNEL_11: 
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_11)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_11)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@S12&",5,500);
+						Time_Delay_Machine_1 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_11 = HAL_GetTick();		
+		}
+		break;	
+		case  CHANNEL_12: 
+		{
+			if(HAL_GetTick() - 200 > Time_AntiR_12)
+				{
+					HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+					
+					if(HAL_GetTick() - 200 > Time_Delay_Machine_12)
+					{
+						HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
+						HAL_UART_Transmit(&huart1,(uint8_t*)"@E12&",5,500);
+						Time_Delay_Machine_12 = HAL_GetTick();
+					}
+				}
+				Time_AntiR_12 = HAL_GetTick();	
+		}
+		break;		
+	}
 	
-		// machine 13
-		if(GPIO_Pin == Sucsess_19)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-				//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
-				HAL_UART_Transmit(&huart1,(uint8_t*)"@S19&",5,500);
-			}
-			time = HAL_GetTick();
-		}
-	  if(GPIO_Pin == Error_19)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_RESET);
-		  HAL_UART_Transmit(&huart1,(uint8_t*)"@E19&",5,500);
-			}
-			time = HAL_GetTick();
-		}
-	
-		
-		// machine 14
-		if(GPIO_Pin == Sucsess_20)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
-			HAL_UART_Transmit(&huart1,(uint8_t*)"@S20&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-	  if(GPIO_Pin == Error_20)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_RESET);
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
-		  HAL_UART_Transmit(&huart1,(uint8_t*)"@E20&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-		
-		// machine 15
-		if(GPIO_Pin == Sucsess_21)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);	
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
-			HAL_UART_Transmit(&huart1,(uint8_t*)"@S21&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-	  if(GPIO_Pin == Error_21)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_RESET);
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
-		  HAL_UART_Transmit(&huart1,(uint8_t*)"@E21&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-		
-		// machine 16
-		if(GPIO_Pin == Sucsess_22)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
-			HAL_UART_Transmit(&huart1,(uint8_t*)"@S22&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-	  if(GPIO_Pin == Error_22)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_RESET);
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
-		  HAL_UART_Transmit(&huart1,(uint8_t*)"@E22&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-		
-		// machine 17
-		if(GPIO_Pin == Sucsess_23)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
-			HAL_UART_Transmit(&huart1,(uint8_t*)"@S23&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-	  if(GPIO_Pin == Error_23)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_RESET);
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
-		  HAL_UART_Transmit(&huart1,(uint8_t*)"@E23&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-	
-		// machine 18
-		if(GPIO_Pin == Sucsess_24)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-				HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_SET);
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
-			HAL_UART_Transmit(&huart1,(uint8_t*)"@S24&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-	  if(GPIO_Pin == Error_24)
-		{
-			if(HAL_GetTick() - 200 > time)
-			{
-			HAL_GPIO_WritePin(GPIOB,GPIO_PIN_7,GPIO_PIN_RESET);
-			//HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_RESET);
-		  HAL_UART_Transmit(&huart1,(uint8_t*)"@E24&",5,1000);
-			}
-			time = HAL_GetTick();
-		}
-		
 		
 }
 /* USER CODE END 4 */
+
+
+
+
 
 /**
   * @brief  This function is executed in case of error occurrence.
